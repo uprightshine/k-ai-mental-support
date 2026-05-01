@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#f6b8c5" />
+  <title>K직장인용 걱정인형 · 직장인의 세 줄 마음기록</title>
+  <link rel="stylesheet" href="/static/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Noto+Sans+KR:wght@400;500;700&display=swap" />
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-dot" aria-hidden="true"></span>
+        <h1>K직장인용 걱정인형</h1>
+      </div>
+      <p class="tagline">오늘의 걱정, 세 줄이면 충분해요</p>
+    </header>
+
+    <nav class="tabs" role="tablist">
+      <button class="tab active" data-tab="write" role="tab">쓰기</button>
+      <button class="tab" data-tab="list" role="tab">기록</button>
+      <button class="tab" data-tab="settings" role="tab">설정</button>
+    </nav>
+
+    <main>
+      <!-- 쓰기 -->
+      <section class="panel active" data-panel="write">
+        <form id="diary-form" class="card">
+          <div class="field">
+            <label for="situation">
+              <span class="q-index">1</span>
+              오늘 마음에 걸렸던 순간은 어떤 장면이었나요?
+            </label>
+            <div class="input-row">
+              <textarea id="situation" name="situation" rows="2" placeholder="예: 회의에서 내 의견을 말하려다 멈췄다" required></textarea>
+              <button type="button" class="stt-btn" data-target="situation" title="음성 입력" aria-label="음성 입력">🎙️</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="thought">
+              <span class="q-index">2</span>
+              그때 어떤 생각이 떠올랐나요?
+            </label>
+            <div class="input-row">
+              <textarea id="thought" name="thought" rows="2" placeholder="예: 또 틀린 말을 할 것 같았다" required></textarea>
+              <button type="button" class="stt-btn" data-target="thought" title="음성 입력" aria-label="음성 입력">🎙️</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="reframe">
+              <span class="q-index">3</span>
+              그 생각을 다르게 본다면? <span class="optional">(비워도 돼요)</span>
+            </label>
+            <div class="input-row">
+              <textarea id="reframe" name="reframe" rows="2" placeholder="예: 틀려도 괜찮다, 오히려 피드백이 된다"></textarea>
+              <button type="button" class="stt-btn" data-target="reframe" title="음성 입력" aria-label="음성 입력">🎙️</button>
+            </div>
+          </div>
+
+          <button type="submit" class="primary-btn" id="submit-btn">
+            <span class="btn-label">K직장인용 걱정인형에게 보내기</span>
+          </button>
+        </form>
+
+        <div id="feedback" class="feedback hidden" aria-live="polite"></div>
+      </section>
+
+      <!-- 기록 -->
+      <section class="panel" data-panel="list">
+        <div id="entries" class="entries"></div>
+        <p id="empty-state" class="empty">아직 기록된 걱정이 없어요. 첫 기록을 시작해볼까요?</p>
+      </section>
+
+      <!-- 설정 -->
+      <section class="panel" data-panel="settings">
+        <div class="card">
+          <h2>내 정보</h2>
+          <div class="field">
+            <label for="job-role">직무 / 연차 <span class="optional">(피드백에 참고)</span></label>
+            <input id="job-role" type="text" placeholder="예: 마케팅 3년차" />
+          </div>
+          <button type="button" class="primary-btn" id="save-profile">저장</button>
+        </div>
+
+        <div class="card subtle">
+          <h2>데이터 관리</h2>
+          <p class="muted">모든 기록은 이 브라우저에만 저장돼요. 서버로 전송되는 건 피드백 요청 순간의 텍스트뿐입니다.</p>
+          <button type="button" class="ghost-btn" id="clear-all">전체 기록 삭제</button>
+        </div>
+
+        <div class="card subtle">
+          <h2>도움이 필요하다면</h2>
+          <ul class="hotlines">
+            <li>자살예방상담전화 <a href="tel:1393">1393</a></li>
+            <li>정신건강위기상담전화 <a href="tel:1577-0199">1577-0199</a></li>
+            <li>한국생명의전화 <a href="tel:1588-9191">1588-9191</a></li>
+          </ul>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <small>K직장인용 걱정인형은 의료기기가 아니며 진단·치료를 제공하지 않아요.</small>
+    </footer>
+  </div>
+
+  <template id="feedback-template">
+    <div class="feedback-card">
+      <div class="feedback-section empathy"></div>
+      <div class="feedback-section distortions hidden">
+        <h3>살펴볼 만한 생각의 습관</h3>
+        <div class="chip-row"></div>
+      </div>
+      <div class="feedback-section reframe">
+        <h3>K직장인용 걱정인형의 되묻기</h3>
+        <p class="reframe-text"></p>
+      </div>
+      <div class="feedback-section question">
+        <h3>내일 한 번 관찰해볼까요</h3>
+        <p class="question-text"></p>
+      </div>
+      <div class="feedback-actions">
+        <button type="button" class="primary-btn" data-action="save">기록 저장</button>
+        <button type="button" class="ghost-btn" data-action="discard">다시 쓰기</button>
+      </div>
+    </div>
+  </template>
+
+  <template id="crisis-template">
+    <div class="feedback-card crisis">
+      <h3>혼자 감당하지 마세요</h3>
+      <p class="crisis-message"></p>
+      <ul class="hotlines"></ul>
+    </div>
+  </template>
+
+  <template id="entry-template">
+    <article class="entry-card">
+      <header class="entry-header">
+        <time></time>
+        <button type="button" class="delete-btn" aria-label="삭제">×</button>
+      </header>
+      <div class="entry-body">
+        <p class="entry-situation"></p>
+        <p class="entry-thought"></p>
+        <p class="entry-reframe"></p>
+      </div>
+      <footer class="entry-feedback"></footer>
+    </article>
+  </template>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
